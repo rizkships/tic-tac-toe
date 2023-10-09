@@ -1,11 +1,11 @@
 const gameBoard = (function () {
    // represent Gameboard as a 2D array
-    board: [
-        ["", "", ""],
-        ["", "", ""],
+  const  board = [
+        ["X", "", ""],
+        ["", "O", ""],
         ["", "", ""]
     ]
-
+return { board }
 })();
 
 const Player = (name, marker) => {
@@ -28,14 +28,14 @@ const displayController = (function() {
 
         // loop through the gameBoard array 
         for (let row = 0; row < gameBoard.board.length; row++){
-            for (let col = 0; col < gameBoard.board[row].length; column++) {
+            for (let col = 0; col < gameBoard.board[row].length; col++) {
                 const cell = document.createElement("div")
                 cell.classList.add("cell")
-                cell.textContent = gameBoard.board[row][column]
+                cell.textContent = gameBoard.board[row][col]
 
                 // add event listeners to cells for player moves here
 
-                gameBoardContainer.appendChild("cell")
+                gameBoardContainer.appendChild(cell)
 
             }
         }
@@ -46,3 +46,5 @@ const displayController = (function() {
     return { renderGameBoard }
 
 })()
+
+renderGameBoard()
