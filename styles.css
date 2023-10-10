@@ -1,13 +1,13 @@
-#game-board {
+#gameboard {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
     height: 300px;
-    border: 1px solid black;
+   
 }
 
-.cell {
+.square {
     display: flex;
     flex-wrap: wrap;
     float: left;
@@ -21,8 +21,9 @@
     
   }
 
-  #controller, 
+  #controls, 
   #message {
     text-align: center;
     margin: 20px 0;
   }
+

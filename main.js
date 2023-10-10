@@ -1,57 +1,51 @@
 const startButton = document.getElementById('start-button')
 
 startButton.addEventListener("click", ()=>{
-  //  Game.start();;
+    Game.start();;
 })
+const Game = (() => {
+    let players = []
+    let currentPlayerIndex;
+    let gameOver;
 
-const start = ()
-const gameBoard = (function () {
-   // represent Gameboard as a 2D array
-  const  board = [
-        ["X", "", ""],
-        ["", "O", ""],
-        ["", "", ""]
+const start = () => {
+     players = [
+        createPlayer(document.getElementById('player1').value, "X"),
+        createPlayer(document.getElementById('player2').value, "O")
+
     ]
-return { board }
-})();
+    currentPlayerIndex = 0;
+    gameOver = false;
+    Gameboard.render();
+}
+return {
+    start
+}
+})()
+
+
 
 const createPlayer = (name, marker) => {
 
     return {name, marker}
 }
 
-const player1 = Player("Omar", "X")
-const computer = Player("Computer", "O")
 
-console.log(player1.name)
+const Gameboard = (() => {
+    let gameboard = ["","","","","","","","",""]
 
-const displayController = (function() {
-    // render the contents of the gameBoard array to the webpage 
-    const gameBoardContainer = document.getElementById("game-board")
+    const render = () => {
+        let boardHTML = ""
+        gameboard.forEach((square, index) => {
+            boardHTML += `<div class="square" id="square-${index}">${square}</div>`
+        })
 
-    function renderGameBoard() {
-        // clear any previous content in the container 
-        gameBoardContainer.textContent = ""
+        document.getElementById('gameboard').innerHTML = boardHTML
 
-        // loop through the gameBoard array 
-        for (let row = 0; row < gameBoard.board.length; row++){
-            for (let col = 0; col < gameBoard.board[row].length; col++) {
-                const cell = document.createElement("div")
-                cell.classList.add("cell")
-                cell.textContent = gameBoard.board[row][col]
-
-                // add event listeners to cells for player moves here
-
-                gameBoardContainer.appendChild(cell)
-
-            }
-        }
-
-        
     }
-    // expose the renderGameBoard function 
-    return { renderGameBoard }
+    return {
+      
+        render,
+    }
 
-})()
-
-renderGameBoard()
+})();
