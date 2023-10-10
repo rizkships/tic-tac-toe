@@ -1,19 +1,28 @@
 #game-board {
-    height: 100px;
-    width: 100px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    height: 300px;
     border: 1px solid black;
 }
 
 .cell {
-    width: 100px;
-    height: 100px;
     display: flex;
+    flex-wrap: wrap;
+    float: left;
+    border: 1px solid black;
     justify-content: center;
     align-items: center;
-    font-size: 24px;
-    font-weight: bold;
-    border: 2px solid #333;
-    cursor: pointer;
-    user-select: none;
-    transition: background-color 0.3s, color 0.3s;
+    width: 25%;
+    height: 30%;
+    text-align: center;
+    font-size: 80px;
+    
+  }
+
+  #controller, 
+  #message {
+    text-align: center;
+    margin: 20px 0;
   }

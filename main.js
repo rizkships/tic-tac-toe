@@ -1,3 +1,10 @@
+const startButton = document.getElementById('start-button')
+
+startButton.addEventListener("click", ()=>{
+  //  Game.start();;
+})
+
+const start = ()
 const gameBoard = (function () {
    // represent Gameboard as a 2D array
   const  board = [
@@ -8,7 +15,7 @@ const gameBoard = (function () {
 return { board }
 })();
 
-const Player = (name, marker) => {
+const createPlayer = (name, marker) => {
 
     return {name, marker}
 }
