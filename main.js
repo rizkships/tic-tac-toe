@@ -75,8 +75,22 @@ const handleClick = (event) => {
 
     currentPlayerIndex = currentPlayerIndex === 0 ? 1 : 0;
 }
+
+const restart = () => {
+    for (let i = 0; i < 9; i++){
+        Gameboard.update(i, "");
+    }
+    Gameboard.render()
+}
 return {
     start,
-    handleClick
+    handleClick,
+    restart
 }
 })()
+
+const restartButton = document.getElementById('restart-button');
+
+restartButton.addEventListener('click', () => {
+    Game.restart()
+})
