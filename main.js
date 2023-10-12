@@ -75,6 +75,9 @@ const handleClick = (event) => {
     if (checkForWin(Gameboard.getGameboard(), players[currentPlayerIndex].marker)) {
         gameOver = true;
         alert(`${players[currentPlayerIndex].name} won!`)
+    } else if (checkForTie(Gameboard.getGameboard())) {
+        gameOver = true
+        alert(`It's a tie!`)
     }
 
     
@@ -116,6 +119,12 @@ const winConditions = [
     // If no win condition is met, return false (no win)
     return false;
   }
+
+  function checkForTie(board) {
+    return board.every(cell => cell !== "")
+  }
+
+
 restartButton.addEventListener('click', () => {
     Game.restart()
 })
