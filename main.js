@@ -102,6 +102,8 @@ const restart = () => {
         Gameboard.update(i, "");
     }
     Gameboard.render()
+    document.getElementById(message).innerHTML = ""
+
 }
 return {
     start,
