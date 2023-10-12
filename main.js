@@ -11,6 +11,14 @@ const createPlayer = (name, marker) => {
     return {name, marker}
 }
 
+const displayController = (() => {
+    const renderMessage = (message) => {
+        document.getElementById('message').innerHTML = message
+    }
+    return {
+        renderMessage
+    }
+})()
 
 const Gameboard = (() => {
     let gameboard = ["","","","","","","","",""]
@@ -66,6 +74,9 @@ const start = () => {
 }
 
 const handleClick = (event) => {
+    if (gameOver){
+        return;
+    }
     let index = parseInt(event.target.id.split("-")[1])
     if (Gameboard.getGameboard()[index] !== "")
         return;
@@ -74,10 +85,11 @@ const handleClick = (event) => {
 
     if (checkForWin(Gameboard.getGameboard(), players[currentPlayerIndex].marker)) {
         gameOver = true;
-        alert(`${players[currentPlayerIndex].name} won!`)
+        displayController.renderMessage(`${players[currentPlayerIndex].name} won!`)
+      
     } else if (checkForTie(Gameboard.getGameboard())) {
         gameOver = true
-        alert(`It's a tie!`)
+        displayController.renderMessage(`It's a tie!`)
     }
 
     
