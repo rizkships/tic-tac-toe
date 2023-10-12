@@ -102,6 +102,7 @@ const restart = () => {
         Gameboard.update(i, "");
     }
     Gameboard.render()
+    gameOver = false;
     document.getElementById(message).innerHTML = ""
 
 }
