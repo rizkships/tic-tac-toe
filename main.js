@@ -1,4 +1,5 @@
 const startButton = document.getElementById('start-button')
+const restartButton = document.getElementById('restart-button');
 
 startButton.addEventListener("click", ()=>{
     Game.start();;
@@ -71,6 +72,11 @@ const handleClick = (event) => {
 
     Gameboard.update(index, players[currentPlayerIndex].marker)
 
+    if (checkForWin(Gameboard.getGameboard(), players[currentPlayerIndex].marker)) {
+        gameOver = true;
+        alert(`${players[currentPlayerIndex].name} won!`)
+    }
+
     
 
     currentPlayerIndex = currentPlayerIndex === 0 ? 1 : 0;
@@ -89,8 +95,27 @@ return {
 }
 })()
 
-const restartButton = document.getElementById('restart-button');
+const winConditions = [
+    [0, 1, 2], [3, 4, 5], [6, 7, 8], // Rows
+    [0, 3, 6], [1, 4, 7], [2, 5, 8], // Columns
+    [0, 4, 8], [2, 4, 6]             // Diagonals
+  ];
 
+  function checkForWin(board, marker) {
+    // Iterate through each win condition (e.g., rows, columns, diagonals)
+    for (const condition of winConditions) {
+      // Destructure the current win condition into three indices
+      const [a, b, c] = condition;
+  
+      // Check if the board has the same marker (X or O) at the specified indices
+      if (board[a] === marker && board[b] === marker && board[c] === marker) {
+        return true; // If all three squares have the same marker, the player has won
+      }
+    }
+  
+    // If no win condition is met, return false (no win)
+    return false;
+  }
 restartButton.addEventListener('click', () => {
     Game.restart()
 })
