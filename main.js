@@ -5,10 +5,18 @@ startButton.addEventListener("click", ()=>{
     Game.start();;
 })
 
-
+/*
 const createPlayer = (name, marker) => {
 
     return {name, marker}
+}
+*/
+
+class Player {
+    constructor(name, marker) {
+        this.name = name
+        this.marker = marker
+    }
 }
 
 const displayController = (() => {
@@ -26,7 +34,7 @@ const Gameboard = (() => {
     const render = () => {
         let boardHTML = ""
         gameboard.forEach((square, index) => {
-            boardHTML += `<div class="square" id="square-${index}">${square}</div>`
+            boardHTML += `<div class="square" id="square-${index}">${square}</div>` // the value from gameboard[index] is fed into square 
         })
 
         document.getElementById('gameboard').innerHTML = boardHTML
@@ -78,6 +86,7 @@ const handleClick = (event) => {
         return;
     }
     let index = parseInt(event.target.id.split("-")[1])
+    // prevent player from clicking on same cell twice
     if (Gameboard.getGameboard()[index] !== "")
         return;
 
