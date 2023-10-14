@@ -19,6 +19,7 @@ class Player {
     }
 }
 
+/*
 const displayController = (() => {
     const renderMessage = (message) => {
         document.getElementById('message').innerHTML = message
@@ -27,6 +28,14 @@ const displayController = (() => {
         renderMessage
     }
 })()
+
+*/
+
+class DisplayController {
+    static renderMessage(message) {
+        document.getElementById("message").innerHTML = message
+    }
+}
 
 const Gameboard = (() => {
     let gameboard = ["","","","","","","","",""]
