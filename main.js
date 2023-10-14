@@ -1,9 +1,5 @@
-const startButton = document.getElementById('start-button')
-const restartButton = document.getElementById('restart-button');
 
-startButton.addEventListener("click", ()=>{
-    Game.start();;
-})
+
 
 /*
 const createPlayer = (name, marker) => {
@@ -128,6 +124,19 @@ return {
 
 */
 
+const startButton = document.getElementById('start-button')
+const restartButton = document.getElementById('restart-button');
+
+
+startButton.addEventListener("click", ()=>{
+    game.start();;
+})
+
+restartButton.addEventListener('click', () => {
+    game.restart()
+})
+
+
 class Player {
     constructor(name, marker) {
         this.name = name
@@ -179,6 +188,8 @@ class Game {
     this.currentPlayerIndex;
     this.gameOver;
 
+    this.gameboard = new Gameboard()
+
     }
 
     start() {
@@ -189,41 +200,41 @@ class Game {
 
         this.currentPlayerIndex = 0;
         this.gameOver = false;
-        this.Gameboard.render();
+        this.gameboard.render();
         const squares = document.querySelectorAll('.square')
         squares.forEach((square) => {
-            square.addEventListener("click", handleClick)
+            square.addEventListener("click", this.handleClick.bind(this))
         })
     }
 
     handleClick(event) {
-        if (gameOver){
+        if (this.gameOver){
             return;
         }
         let index = parseInt(event.target.id.split("-")[1])
         // prevent player from clicking on same cell twice
-        if (Gameboard.getGameboard()[index] !== "")
+        if (this.gameboard.getGameboard()[index] !== "")
             return;
     
-        Gameboard.update(index, players[currentPlayerIndex].marker)
+        this.gameboard.update(index, players[currentPlayerIndex].marker)
     
-        if (checkForWin(Gameboard.getGameboard(), players[currentPlayerIndex].marker)) {
-            gameOver = true;
-            displayController.renderMessage(`${players[currentPlayerIndex].name} won!`)
+        if (checkForWin(this.gameboard.getGameboard(), this.players[this.currentPlayerIndex].marker)) {
+            this.gameOver = true;
+            displayController.renderMessage(`${this.players[this.currentPlayerIndex].name} won!`)
           
-        } else if (checkForTie(Gameboard.getGameboard())) {
-            gameOver = true
+        } else if (checkForTie(this.gameboard.getGameboard())) {
+            this.gameOver = true
             displayController.renderMessage(`It's a tie!`)
         }
     
         
     
-        currentPlayerIndex = currentPlayerIndex === 0 ? 1 : 0;
+        this.currentPlayerIndex = this.currentPlayerIndex === 0 ? 1 : 0;
     }
 
     restart() {
         for (let i = 0; i < 9; i++){
-            Gameboard.update(i, "");
+            this.gameboard.update(i, "");
         }
         this.gameboard.render()
         this.gameOver = false;
@@ -263,6 +274,5 @@ const winConditions = [
   }
 
 
-restartButton.addEventListener('click', () => {
-    Game.restart()
-})
+  const gameboard = new Gameboard();
+  const game = new Game();
