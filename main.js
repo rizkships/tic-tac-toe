@@ -12,13 +12,6 @@ const createPlayer = (name, marker) => {
 }
 */
 
-class Player {
-    constructor(name, marker) {
-        this.name = name
-        this.marker = marker
-    }
-}
-
 /*
 const displayController = (() => {
     const renderMessage = (message) => {
@@ -31,12 +24,35 @@ const displayController = (() => {
 
 */
 
-class DisplayController {
-    static renderMessage(message) {
-        document.getElementById("message").innerHTML = message
+/*
+const handleClick = (event) => {
+    if (gameOver){
+        return;
     }
-}
+    let index = parseInt(event.target.id.split("-")[1])
+    // prevent player from clicking on same cell twice
+    if (Gameboard.getGameboard()[index] !== "")
+        return;
 
+    Gameboard.update(index, players[currentPlayerIndex].marker)
+
+    if (checkForWin(Gameboard.getGameboard(), players[currentPlayerIndex].marker)) {
+        gameOver = true;
+        displayController.renderMessage(`${players[currentPlayerIndex].name} won!`)
+      
+    } else if (checkForTie(Gameboard.getGameboard())) {
+        gameOver = true
+        displayController.renderMessage(`It's a tie!`)
+    }
+
+    
+
+    currentPlayerIndex = currentPlayerIndex === 0 ? 1 : 0;
+}
+*/
+
+
+/*
 const Gameboard = (() => {
     let gameboard = ["","","","","","","","",""]
 
@@ -70,6 +86,8 @@ const Gameboard = (() => {
 
 })();
 
+
+
 const Game = (() => {
     let players = []
     let currentPlayerIndex;
@@ -90,30 +108,7 @@ const start = () => {
     })
 }
 
-const handleClick = (event) => {
-    if (gameOver){
-        return;
-    }
-    let index = parseInt(event.target.id.split("-")[1])
-    // prevent player from clicking on same cell twice
-    if (Gameboard.getGameboard()[index] !== "")
-        return;
 
-    Gameboard.update(index, players[currentPlayerIndex].marker)
-
-    if (checkForWin(Gameboard.getGameboard(), players[currentPlayerIndex].marker)) {
-        gameOver = true;
-        displayController.renderMessage(`${players[currentPlayerIndex].name} won!`)
-      
-    } else if (checkForTie(Gameboard.getGameboard())) {
-        gameOver = true
-        displayController.renderMessage(`It's a tie!`)
-    }
-
-    
-
-    currentPlayerIndex = currentPlayerIndex === 0 ? 1 : 0;
-}
 
 const restart = () => {
     for (let i = 0; i < 9; i++){
@@ -130,6 +125,116 @@ return {
     restart
 }
 })()
+
+*/
+
+class Player {
+    constructor(name, marker) {
+        this.name = name
+        this.marker = marker
+    }
+}
+
+
+
+class DisplayController {
+    static renderMessage(message) {
+        document.getElementById("message").innerHTML = message
+    }
+}
+
+class Gameboard {
+    constructor() {
+        this.gameboard = ["", "", "", "", "", "", "", "", ""]
+    }
+
+    render() {
+        let boardHTML = ""
+        this.gameboard.forEach((square, index) => {
+            boardHTML += `<div class="square" id="square-${index}">${square}</div>` // the value from gameboard[index] is fed into square
+
+        });
+        document.getElementById('gameboard').innerHTML = boardHTML
+        const squares = document.querySelectorAll(".square")
+        squares.forEach((square) => {
+            square.addEventListener("click", this.handleClick)
+        })
+    }
+
+    update (index, value) {
+        this.gameboard[index] = value
+        this.render()
+    }
+
+    getGameboard() {
+        return this.gameboard
+    }
+
+    
+}
+
+class Game {
+    constructor () {
+    this.players = []
+    this.currentPlayerIndex;
+    this.gameOver;
+
+    }
+
+    start() {
+        this.players = [
+            new Player(document.getElementById('player1').value, "X"),
+            new Player(document.getElementById('player2').value, "O")
+        ]
+
+        this.currentPlayerIndex = 0;
+        this.gameOver = false;
+        this.Gameboard.render();
+        const squares = document.querySelectorAll('.square')
+        squares.forEach((square) => {
+            square.addEventListener("click", handleClick)
+        })
+    }
+
+    handleClick(event) {
+        if (gameOver){
+            return;
+        }
+        let index = parseInt(event.target.id.split("-")[1])
+        // prevent player from clicking on same cell twice
+        if (Gameboard.getGameboard()[index] !== "")
+            return;
+    
+        Gameboard.update(index, players[currentPlayerIndex].marker)
+    
+        if (checkForWin(Gameboard.getGameboard(), players[currentPlayerIndex].marker)) {
+            gameOver = true;
+            displayController.renderMessage(`${players[currentPlayerIndex].name} won!`)
+          
+        } else if (checkForTie(Gameboard.getGameboard())) {
+            gameOver = true
+            displayController.renderMessage(`It's a tie!`)
+        }
+    
+        
+    
+        currentPlayerIndex = currentPlayerIndex === 0 ? 1 : 0;
+    }
+
+    restart() {
+        for (let i = 0; i < 9; i++){
+            Gameboard.update(i, "");
+        }
+        this.gameboard.render()
+        this.gameOver = false;
+        DisplayController.renderMessage("");
+    }
+    
+
+
+}
+
+
 
 const winConditions = [
     [0, 1, 2], [3, 4, 5], [6, 7, 8], // Rows
