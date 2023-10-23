@@ -26,9 +26,13 @@ class Player {
 
 
 class DisplayController {
-    static renderMessage(message) {
+     renderMessage(message) {
         document.getElementById("message").innerHTML = message;
     }
+
+    clearMessage() {
+        document.getElementById('message').innerHTML = "";
+      }
 }
 
 class Gameboard {
