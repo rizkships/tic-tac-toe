@@ -1,133 +1,130 @@
 
 
-const startButton = document.getElementById('start-button')
+const startButton = document.getElementById('start-button');
 const restartButton = document.getElementById('restart-button');
 let game;
 
 startButton.addEventListener("click", ()=>{
     game = new Game();
-    game.start();;
+    game.start();
 })
 
 restartButton.addEventListener('click', () => {
     if (game) {
     game.restart()
-    }
+    };
 })
 
 
 class Player {
     constructor(name, marker) {
-        this.name = name
-        this.marker = marker
-    }
+        this.name = name;
+        this.marker = marker;
+    };
 }
 
 
 
 class DisplayController {
     static renderMessage(message) {
-        document.getElementById("message").innerHTML = message
+        document.getElementById("message").innerHTML = message;
     }
 }
 
 class Gameboard {
-    constructor() {
-        this.gameboard = ["", "", "", "", "", "", "", "", ""]
+    constructor(handleClick) { //added handleClick
+        this.gameboard = ["", "", "", "", "", "", "", "", ""];
+        this.handleClick = handleClick
     }
 
     render() {
         let boardHTML = ""
         this.gameboard.forEach((square, index) => {
-            boardHTML += `<div class="square" id="square-${index}">${square}</div>` // the value from gameboard[index] is fed into square
+            boardHTML += `<div class="square" id="square-${index}">${square}</div>`; // the value from gameboard[index] is fed into square
 
         });
-        document.getElementById('gameboard').innerHTML = boardHTML
-        const squares = document.querySelectorAll(".square")
-        squares.forEach((square) => {
-            square.addEventListener("click", (event) => this.handleClick(event))
-        })
-    }
+        document.getElementById('gameboard').innerHTML = boardHTML;
+        const squares = document.querySelectorAll(".square");
+        squares.forEach((square, index) => {
+            square.addEventListener("click", () => {
+                console.log(this); 
+                this.handleClick(index);
+              // 
+        });
+    })};
 
     update (index, value) {
-        this.gameboard[index] = value
-        this.render()
+        this.gameboard[index] = value;
+        this.render();
     }
 
     getGameboard() {
-        return this.gameboard
+        return this.gameboard;
     }
 
     
-}
-
-class Game {
-    constructor () {
-    this.players = []
-    this.currentPlayerIndex;
-    this.gameOver;
-
-    this.gameboard = new Gameboard()
-
     }
 
-    start() {
-        this.players = [
+    class Game {
+        constructor() {
+          this.players = [];
+          this.currentPlayerIndex = 0;
+          this.gameOver = false;
+          this.gameboard = new Gameboard(this.handleSquareClick.bind(this));
+          this.displayController = new DisplayController();
+        }
+      
+        start() {
+          this.players = [
             new Player(document.getElementById('player1').value, "X"),
             new Player(document.getElementById('player2').value, "O")
-        ]
-
-        this.currentPlayerIndex = 0;
-        this.gameOver = false;
-        this.gameboard.render();
-        const squares = document.querySelectorAll('.square')
-        squares.forEach((square) => {
-            square.addEventListener("click", this.handleClick.bind(this)) // deleted .bind(this)
-        })
-    }
-
-    handleClick(event) {
-        if (this.gameOver){
-            return;
+          ];
+          this.currentPlayerIndex = 0;
+          this.gameOver = false;
+          this.gameboard.render();
         }
-        let index = parseInt(event.target.id.split("-")[1])
-        // prevent player from clicking on same cell twice
-        if (this.gameboard.getGameboard()[index] !== "")
-            return;
-    
-        this.gameboard.update(index, this.players[this.currentPlayerIndex].marker)
-    
-        if (checkForWin(this.gameboard.getGameboard(), this.players[this.currentPlayerIndex].marker)) {
+      
+        handleSquareClick(index) {
+          if (this.gameOver) return;
+          if (this.gameboard.getGameboard()[index] !== "") return;
+      
+          this.gameboard.update(index, this.players[this.currentPlayerIndex].marker);
+      
+          if (this.checkForWin()) {
             this.gameOver = true;
-            DisplayController.renderMessage(`${this.players[this.currentPlayerIndex].name} won!`)
-          
-        } else if (checkForTie(this.gameboard.getGameboard())) {
-            this.gameOver = true
-            DisplayController.renderMessage(`It's a tie!`)
+            this.displayController.renderMessage(`${this.players[this.currentPlayerIndex].name} won!`);
+          } else if (this.checkForTie()) {
+            this.gameOver = true;
+            this.displayController.renderMessage(`It's a tie!`);
+          }
+      
+          this.currentPlayerIndex = this.currentPlayerIndex === 0 ? 1 : 0;
         }
-    
-        
-    
-        this.currentPlayerIndex = this.currentPlayerIndex === 0 ? 1 : 0;
-    }
-
-    restart() {
-        for (let i = 0; i < 9; i++){
-            this.gameboard.update(i, "");
+      
+        checkForWin() {
+          const board = this.gameboard.getGameboard();
+          const marker = this.players[this.currentPlayerIndex].marker;
+      
+          for (const condition of winConditions) {
+            const [a, b, c] = condition;
+            if (board[a] === marker && board[b] === marker && board[c] === marker) {
+              return true;
+            }
+          }
+          return false;
         }
-        this.gameboard.render()
-        this.gameOver = false;
-        DisplayController.renderMessage("");
-
-            // Clear player names
-    document.getElementById('player1').value = "";
-    document.getElementById('player2').value = "";
-
-    }
-    
-
-
-}
+      
+        checkForTie() {
+          return this.gameboard.getGameboard().every(cell => cell !== "");
+        }
+      
+        restart() {
+          this.gameboard.reset();
+          this.gameOver = false;
+          this.displayController.clearMessage();
+        }
+      }
+      
 
 
 
@@ -140,21 +137,21 @@ const winConditions = [
   function checkForWin(board, marker) {
     // Iterate through each win condition (e.g., rows, columns, diagonals)
     for (const condition of winConditions) {
-      // Destructure the current win condition into three indices
+      // Destructure the current win condition into three indices$
       const [a, b, c] = condition;
   
       // Check if the board has the same marker (X or O) at the specified indices
       if (board[a] === marker && board[b] === marker && board[c] === marker) {
         return true; // If all three squares have the same marker, the player has won
-      }
-    }
+      };
+    };
   
     // If no win condition is met, return false (no win)
     return false;
   }
 
   function checkForTie(board) {
-    return board.every(cell => cell !== "")
+    return board.every(cell => cell !== "");
   }
 
 
