@@ -36,38 +36,39 @@ class DisplayController {
 }
 
 class Gameboard {
-    constructor(handleClick) { //added handleClick
-        this.gameboard = ["", "", "", "", "", "", "", "", ""];
-        this.handleClick = handleClick
+    constructor(handleClick) {
+      this.gameboard = ["", "", "", "", "", "", "", "", ""];
+      this.handleClick = handleClick;
     }
-
+  
     render() {
-        let boardHTML = ""
-        this.gameboard.forEach((square, index) => {
-            boardHTML += `<div class="square" id="square-${index}">${square}</div>`; // the value from gameboard[index] is fed into square
-
-        });
-        document.getElementById('gameboard').innerHTML = boardHTML;
-        const squares = document.querySelectorAll(".square");
-        squares.forEach((square, index) => {
-            square.addEventListener("click", () => {
-                console.log(this); 
-                this.handleClick(index);
-              // 
-        });
-    })};
-
-    update (index, value) {
-        this.gameboard[index] = value;
-        this.render();
+      let boardHTML = "";
+      this.gameboard.forEach((square, index) => {
+        boardHTML += `<div class="square" id="square-${index}">${square}</div>`;
+      });
+  
+      document.getElementById('gameboard').innerHTML = boardHTML;
+      const squares = document.querySelectorAll(".square");
+      squares.forEach((square, index) => {
+        square.addEventListener("click", () => this.handleClick(index));
+      });
     }
-
+  
+    update(index, value) {
+      this.gameboard[index] = value;
+      this.render();
+    }
+  
     getGameboard() {
-        return this.gameboard;
+      return this.gameboard;
     }
+  
+    reset() {
+      this.gameboard = ["", "", "", "", "", "", "", "", ""];
+      this.render();
+    }
+  }
 
-    
-    }
 
     class Game {
         constructor() {
