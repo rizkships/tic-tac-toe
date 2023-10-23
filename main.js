@@ -1,19 +1,5 @@
 
 
-const startButton = document.getElementById('start-button');
-const restartButton = document.getElementById('restart-button');
-let game;
-
-startButton.addEventListener("click", ()=>{
-    game = new Game();
-    game.start();
-})
-
-restartButton.addEventListener('click', () => {
-    if (game) {
-    game.restart()
-    };
-})
 
 
 class Player {
@@ -141,3 +127,15 @@ const winConditions = [
 
   
 
+  const startButton = document.getElementById('start-button');
+  const restartButton = document.getElementById('restart-button');
+  const game = new Game();
+  
+  startButton.addEventListener("click", ()=>{
+      game.start();
+  })
+  
+  restartButton.addEventListener('click', () => {
+      game.restart();
+      }
+  )
